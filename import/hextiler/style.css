@@ -1,0 +1,46 @@
+:root {
+    --hxt-floor-color  : #bbbbbb;
+    --hxt-lateral-color: #999999;
+
+    --hxt-hover-border-color: white;
+    --hxt-hover-border-width: 2px;
+
+    --hxt-border-width: 2px;
+    --hxt-border-color: #161616;
+
+    --hxt-stroke-width: 1px;
+    --hxt-stroke-color: #161616;
+}
+
+.hxt-tile {
+    position: absolute;
+    overflow: visible;
+
+    pointer-events: none;
+}
+
+.hxt-tile-border {
+    stroke: var(--hxt-border-color);
+    stroke-width: var(--hxt-border-width);
+    pointer-events: all;
+}
+
+.hxt-tile-floor {
+    fill: var(--hxt-floor-color);
+}
+.hxt-tile-lateral {
+    fill: var(--hxt-lateral-color);
+}
+.hxt-tile-floor,
+.hxt-tile-lateral {
+    stroke: var(--hxt-stroke-color);
+    stroke-width: var(--hxt-stroke-width);
+    pointer-events: none;
+}
+
+.hxt-tile-border:hover,
+.hxt-tile-border:hover ~ .hxt-tile-floor,
+.hxt-tile-border:hover ~ .hxt-tile-lateral {
+    stroke: var(--hxt-hover-border-color);
+    stroke-width: var(--hxt-border-width);
+}
