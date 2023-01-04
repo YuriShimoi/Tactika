@@ -23,6 +23,11 @@ body {
     align-items: center;
 }
 
+#main {
+    margin-left: -40%;
+    margin-top: -30%;
+}
+
 .water-tile {
     opacity: 0.8;
 

@@ -46,6 +46,14 @@ class HexTiler {
         containerHTML.appendChild(tile_border);
         containerHTML.appendChild(tile_lateral);
         containerHTML.appendChild(tile_floor);
+
+        //#region [Shaders]
+        let tile_shader_minimal = HexTiler.polygonFromPoints(_tile.CartesianShaderMinimal(), containerHTML);
+        tile_shader_minimal.classList.add("hxt-tile-shadow");
+
+        containerHTML.appendChild(tile_shader_minimal);
+        //#endregion
+
         _element.appendChild(containerHTML);
     }
 
@@ -92,6 +100,8 @@ class HexTile {
         this.y = _y;
         this.z = _z;
 
+        this.d = _x - Math.floor(_y/2);
+
         this.classes = _aditional_classes;
     }
     
@@ -110,5 +120,15 @@ class HexTile {
         if(_height <= 0) return this.CartesianFloor();
 
         return [[1,0], [3,0], [4,1], [4,1+_height], [3,2+_height], [1,2+_height], [0,1+_height], [0,1], [1,0]];
+    }
+
+    /**
+     * @returns  {[[x,y]...]} Array of points to form the lateral minimal shadow
+     */
+    CartesianShaderMinimal() {
+        let _height = this.z * HexTiler.config.step_height;
+        if(_height <= 0) return [];
+
+        return [[1,2], [3,2], [4,1], [4,1+_height], [3,2+_height], [1,2+_height], [1,2]];
     }
 }

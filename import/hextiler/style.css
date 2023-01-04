@@ -56,3 +56,8 @@
     stroke: var(--hxt-hover-border-color);
     stroke-width: var(--hxt-border-width);
 }
+
+.hxt-tile-shadow {
+    opacity: 0.3;
+    fill: black;
+}
