@@ -23,3 +23,11 @@ body {
     align-items: center;
 }
 
+.water-tile {
+    opacity: 0.8;
+
+    --hxt-floor-color  : #3191ff;
+    --hxt-lateral-color: #0077ff;
+    --hxt-stroke-color : #ffffff22;
+    --hxt-border-color : #ffffff22;
+}

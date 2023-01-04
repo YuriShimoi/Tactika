@@ -1,15 +1,15 @@
 :root {
-    --hxt-floor-color  : #bbbbbb;
-    --hxt-lateral-color: #999999;
+    --hxt-default-floor-color  : #bbbbbb;
+    --hxt-default-lateral-color: #999999;
 
-    --hxt-hover-border-color: white;
-    --hxt-hover-border-width: 2px;
+    --hxt-default-hover-border-color: white;
+    --hxt-default-hover-border-width: 2px;
 
-    --hxt-border-width: 2px;
-    --hxt-border-color: #161616;
+    --hxt-default-border-width: 2px;
+    --hxt-default-border-color: #161616;
 
-    --hxt-stroke-width: 1px;
-    --hxt-stroke-color: #161616;
+    --hxt-default-stroke-width: 1px;
+    --hxt-default-stroke-color: #161616;
 }
 
 .hxt-tile {
@@ -17,6 +17,18 @@
     overflow: visible;
 
     pointer-events: none;
+    
+    --hxt-floor-color: var(--hxt-default-floor-color);
+    --hxt-lateral-color: var(--hxt-default-lateral-color);
+
+    --hxt-hover-border-color: var(--hxt-default-hover-border-color);
+    --hxt-hover-border-width: var(--hxt-default-hover-border-width);
+
+    --hxt-border-width: var(--hxt-default-border-width);
+    --hxt-border-color: var(--hxt-default-border-color);
+
+    --hxt-stroke-width: var(--hxt-default-stroke-width);
+    --hxt-stroke-color: var(--hxt-default-stroke-color);
 }
 
 .hxt-tile-border {
