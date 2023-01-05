@@ -8,7 +8,7 @@
     --hxt-default-border-width: 2px;
     --hxt-default-border-color: #161616;
 
-    --hxt-default-stroke-width: 1px;
+    --hxt-default-stroke-width: 2px;
     --hxt-default-stroke-color: #161616;
 }
 
@@ -17,6 +17,7 @@
     overflow: visible;
 
     pointer-events: none;
+    stroke-linejoin: round;
     
     --hxt-floor-color: var(--hxt-default-floor-color);
     --hxt-lateral-color: var(--hxt-default-lateral-color);
