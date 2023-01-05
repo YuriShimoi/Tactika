@@ -29,8 +29,8 @@ class HexTiler {
         containerHTML.setAttribute('width' , 4 * HexTiler.config.scale);
 
         let even_adjust = _tile.y % 2? 3: 0; // when is an even line need an initial adjust
-        let _left = (_tile.x * 6 + even_adjust) * HexTiler.config.scale;
-        let _top  = (_tile.y - _tile.z) * HexTiler.config.scale;
+        let _left = (_tile.x * 6 + even_adjust) * HexTiler.config.scale + (_tile.x * 1);
+        let _top  = (_tile.y - _tile.z) * HexTiler.config.scale + (_tile.y * 1);
         containerHTML.style = `z-index: ${_tile.y};margin-left: ${_left}px; margin-top: ${_top}px`;
 
         // total_border
