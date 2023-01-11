@@ -1,15 +1,15 @@
 :root {
-    --hxt-default-floor-color  : #bbbbbb;
-    --hxt-default-lateral-color: #999999;
+    --hxt-default-floor-color  : #dddddd;
+    --hxt-default-lateral-color: #aaaaaa;
 
     --hxt-default-hover-border-color: white;
     --hxt-default-hover-border-width: 2px;
 
     --hxt-default-border-width: 2px;
-    --hxt-default-border-color: #161616;
+    --hxt-default-border-color: #0a0a0a;
 
     --hxt-default-stroke-width: 2px;
-    --hxt-default-stroke-color: #161616;
+    --hxt-default-stroke-color: #0a0a0a;
 }
 
 .hxt-tile {
