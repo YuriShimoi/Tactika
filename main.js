@@ -11,6 +11,7 @@ let MAPPING = [
 
 function start() {
     HexTiler.draw(ELEMENT, MAPPING);
+    // hihi
 }
 
 start();
