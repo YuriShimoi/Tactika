@@ -24,6 +24,10 @@ class HexTiler {
         containerHTML.id = `hxt-tile-${_tile.id}`;
         containerHTML.classList.add("hxt-tile", ..._tile.classes);
 
+        containerHTML.setAttribute('da', _tile.da);
+        containerHTML.setAttribute('db', _tile.db);
+        containerHTML.setAttribute('dc', _tile.dc);
+
         let tile_height = _tile.z * HexTiler.config.step_height;
         containerHTML.setAttribute('height', (2 + tile_height) * HexTiler.config.scale);
         containerHTML.setAttribute('width' , 4 * HexTiler.config.scale);
@@ -91,8 +95,11 @@ class HexTiler {
 class HexTile {
     static _ID_INCREMENT = 0;
 
-    static CACHE_HEIGHT_BY_POS = {};
-    static CACHE_HEIGHT_BY_DIA = {};
+    static CACHE_HEIGHT_BY_POS = {
+        'da': [],
+        'db': [],
+        'dc': []
+    };
     
     /** Tile instance use on HexTiler
      * @param {Number} _x - Horizontal position
@@ -107,13 +114,20 @@ class HexTile {
         this.y = _y;
         this.z = _z;
 
-        this.d = _x - Math.floor(_y/2);
+        this.da = _x - Math.floor(_y/2);
+        this.db = (_x * 2) + (_y % 2);
+        this.dc = _x + Math.ceil(_y/2);
 
         this.classes = _aditional_classes;
 
         HexTile.CACHE_HEIGHT_BY_POS[`${_x},${_y}`] = _z;
-        if(this.d in HexTile.CACHE_HEIGHT_BY_POS) HexTile.CACHE_HEIGHT_BY_POS[this.d].push([this.x, this.y, this.z]);
-        else HexTile.CACHE_HEIGHT_BY_POS[this.d] = [this.x, this.y, this.z];
+        
+        if(this.da in HexTile.CACHE_HEIGHT_BY_POS.da) HexTile.CACHE_HEIGHT_BY_POS.da[this.d].push([this.x, this.y, this.z]);
+        else HexTile.CACHE_HEIGHT_BY_POS.da[this.d] = [this.x, this.y, this.z];
+        if(this.db in HexTile.CACHE_HEIGHT_BY_POS.db) HexTile.CACHE_HEIGHT_BY_POS.db[this.d].push([this.x, this.y, this.z]);
+        else HexTile.CACHE_HEIGHT_BY_POS.db[this.d] = [this.x, this.y, this.z];
+        if(this.dc in HexTile.CACHE_HEIGHT_BY_POS.dc) HexTile.CACHE_HEIGHT_BY_POS.dc[this.d].push([this.x, this.y, this.z]);
+        else HexTile.CACHE_HEIGHT_BY_POS.dc[this.d] = [this.x, this.y, this.z];
     }
 
     
