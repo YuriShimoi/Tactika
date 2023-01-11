@@ -54,12 +54,8 @@ class HexTiler {
         let tile_shader_top = HexTiler.polygonFromPoints(_tile.cartesianShaderTop(), containerHTML);
         tile_shader_top.classList.add("hxt-tile-shadow");
 
-        let tile_shader_diagonal = HexTiler.polygonFromPoints(_tile.cartesianShaderDiagonal(), containerHTML);
-        tile_shader_diagonal.classList.add("hxt-tile-shadow");
-
         containerHTML.appendChild(tile_shader_minimal);
         containerHTML.appendChild(tile_shader_top);
-        containerHTML.appendChild(tile_shader_diagonal);
         //#endregion
 
         _element.appendChild(containerHTML);
@@ -120,10 +116,6 @@ class HexTile {
         else HexTile.CACHE_HEIGHT_BY_POS[this.d] = [this.x, this.y, this.z];
     }
 
-
-    getHigherDiagonalDiff() {
-        return 0;
-    }
     
     /**
      * @returns {[[x,y]...]} Array of points to form the hexagonal floor
@@ -163,18 +155,5 @@ class HexTile {
         let _anchor = height_diff >= 2? [3,2]: [2,1];
         
         return [[1,0], _anchor, [4,1], [3,0], [1,0]];
-    }
-
-    /**
-     * @returns  {[[x,y]...]} Array of points to form the diagonal shadow
-     */
-    cartesianShaderDiagonal() {
-        let higher_diagonal = this.getHigherDiagonalDiff();
-        if(higher_diagonal == 0) return [];
-
-        let height_diff = higher_diagonal - this.z;
-        let _anchor = height_diff >= 2? [3,2]: [2,1];
-
-        return [[1,0], _anchor, [1,2], [0,1], [1,0]];
     }
 }
