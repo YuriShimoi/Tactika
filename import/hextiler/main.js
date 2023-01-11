@@ -95,11 +95,7 @@ class HexTiler {
 class HexTile {
     static _ID_INCREMENT = 0;
 
-    static CACHE_HEIGHT_BY_POS = {
-        'da': [],
-        'db': [],
-        'dc': []
-    };
+    static CACHE_HEIGHT_BY_POS = {'da': {}, 'db': {}, 'dc': {}};
     
     /** Tile instance use on HexTiler
      * @param {Number} _x - Horizontal position
@@ -122,12 +118,12 @@ class HexTile {
 
         HexTile.CACHE_HEIGHT_BY_POS[`${_x},${_y}`] = _z;
         
-        if(this.da in HexTile.CACHE_HEIGHT_BY_POS.da) HexTile.CACHE_HEIGHT_BY_POS.da[this.d].push([this.x, this.y, this.z]);
-        else HexTile.CACHE_HEIGHT_BY_POS.da[this.d] = [this.x, this.y, this.z];
-        if(this.db in HexTile.CACHE_HEIGHT_BY_POS.db) HexTile.CACHE_HEIGHT_BY_POS.db[this.d].push([this.x, this.y, this.z]);
-        else HexTile.CACHE_HEIGHT_BY_POS.db[this.d] = [this.x, this.y, this.z];
-        if(this.dc in HexTile.CACHE_HEIGHT_BY_POS.dc) HexTile.CACHE_HEIGHT_BY_POS.dc[this.d].push([this.x, this.y, this.z]);
-        else HexTile.CACHE_HEIGHT_BY_POS.dc[this.d] = [this.x, this.y, this.z];
+        if(this.da in HexTile.CACHE_HEIGHT_BY_POS.da) HexTile.CACHE_HEIGHT_BY_POS.da[this.da].push([this.x, this.y, this.z]);
+        else HexTile.CACHE_HEIGHT_BY_POS.da[this.da] = [this.x, this.y, this.z];
+        if(this.db in HexTile.CACHE_HEIGHT_BY_POS.db) HexTile.CACHE_HEIGHT_BY_POS.db[this.db].push([this.x, this.y, this.z]);
+        else HexTile.CACHE_HEIGHT_BY_POS.db[this.db] = [this.x, this.y, this.z];
+        if(this.dc in HexTile.CACHE_HEIGHT_BY_POS.dc) HexTile.CACHE_HEIGHT_BY_POS.dc[this.dc].push([this.x, this.y, this.z]);
+        else HexTile.CACHE_HEIGHT_BY_POS.dc[this.dc] = [this.x, this.y, this.z];
     }
 
     
