@@ -35,6 +35,11 @@ body {
             drop-shadow(calc(-1* var(--shadow-distance)) calc(-1* var(--shadow-distance)) var(--shadow-blur) var(--shadow-color));
 }
 
+#main {
+    margin-left: -40%;
+    margin-top: -30%;
+}
+
 .water-tile {
     opacity: 0.8;
 

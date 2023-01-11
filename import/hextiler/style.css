@@ -58,3 +58,8 @@
     stroke-width: var(--hxt-border-width);
     transform: translateY(calc(-1 * var(--hxt-border-width)));
 }
+
+.hxt-tile-shadow {
+    opacity: 0.5;
+    fill: black;
+}

@@ -34,18 +34,34 @@ class HexTiler {
         containerHTML.style = `z-index: ${_tile.y};margin-left: ${_left}px; margin-top: ${_top}px`;
 
         // total_border
-        let tile_border = HexTiler.polygonFromPoints(_tile.CartesianTotal(), containerHTML);
+        let tile_border = HexTiler.polygonFromPoints(_tile.cartesianTotal(), containerHTML);
         tile_border.classList.add("hxt-tile-border");
         // lateral
-        let tile_lateral = HexTiler.polygonFromPoints(_tile.CartesianTotal(), containerHTML);
+        let tile_lateral = HexTiler.polygonFromPoints(_tile.cartesianTotal(), containerHTML);
         tile_lateral.classList.add("hxt-tile-lateral");
         // floor
-        let tile_floor = HexTiler.polygonFromPoints(_tile.CartesianFloor(), containerHTML);
+        let tile_floor = HexTiler.polygonFromPoints(_tile.cartesianFloor(), containerHTML);
         tile_floor.classList.add("hxt-tile-floor");
 
         containerHTML.appendChild(tile_border);
         containerHTML.appendChild(tile_lateral);
         containerHTML.appendChild(tile_floor);
+
+        //#region [Shaders]
+        let tile_shader_minimal = HexTiler.polygonFromPoints(_tile.cartesianShaderMinimal(), containerHTML);
+        tile_shader_minimal.classList.add("hxt-tile-shadow");
+
+        let tile_shader_top = HexTiler.polygonFromPoints(_tile.cartesianShaderTop(), containerHTML);
+        tile_shader_top.classList.add("hxt-tile-shadow");
+
+        let tile_shader_diagonal = HexTiler.polygonFromPoints(_tile.cartesianShaderDiagonal(), containerHTML);
+        tile_shader_diagonal.classList.add("hxt-tile-shadow");
+
+        containerHTML.appendChild(tile_shader_minimal);
+        containerHTML.appendChild(tile_shader_top);
+        containerHTML.appendChild(tile_shader_diagonal);
+        //#endregion
+
         _element.appendChild(containerHTML);
     }
 
@@ -78,6 +94,9 @@ class HexTiler {
 
 class HexTile {
     static _ID_INCREMENT = 0;
+
+    static CACHE_HEIGHT_BY_POS = {};
+    static CACHE_HEIGHT_BY_DIA = {};
     
     /** Tile instance use on HexTiler
      * @param {Number} _x - Horizontal position
@@ -92,23 +111,70 @@ class HexTile {
         this.y = _y;
         this.z = _z;
 
+        this.d = _x - Math.floor(_y/2);
+
         this.classes = _aditional_classes;
+
+        HexTile.CACHE_HEIGHT_BY_POS[`${_x},${_y}`] = _z;
+        if(this.d in HexTile.CACHE_HEIGHT_BY_POS) HexTile.CACHE_HEIGHT_BY_POS[this.d].push([this.x, this.y, this.z]);
+        else HexTile.CACHE_HEIGHT_BY_POS[this.d] = [this.x, this.y, this.z];
+    }
+
+
+    getHigherDiagonalDiff() {
+        return 0;
     }
     
     /**
      * @returns {[[x,y]...]} Array of points to form the hexagonal floor
      */
-    CartesianFloor() {
+    cartesianFloor() {
         return [[1,0], [3,0], [4,1], [3,2], [1,2], [0,1], [1,0]];
     }
 
     /**
      * @returns  {[[x,y]...]} Array of points to form the entire tile form
      */
-    CartesianTotal() {
+    cartesianTotal() {
         let _height = this.z * HexTiler.config.step_height;
-        if(_height <= 0) return this.CartesianFloor();
+        if(_height <= 0) return this.cartesianFloor();
 
         return [[1,0], [3,0], [4,1], [4,1+_height], [3,2+_height], [1,2+_height], [0,1+_height], [0,1], [1,0]];
+    }
+
+    /**
+     * @returns  {[[x,y]...]} Array of points to form the front and right laterals shadow
+     */
+    cartesianShaderMinimal() {
+        let _height = this.z * HexTiler.config.step_height;
+        if(_height <= 0) return [];
+
+        return [[1,2], [3,2], [4,1], [4,1+_height], [3,2+_height], [1,2+_height], [1,2]];
+    }
+
+    /**
+     * @returns  {[[x,y]...]} Array of points to form the top shadow
+     */
+    cartesianShaderTop() {
+        let top_tile_height = HexTile.CACHE_HEIGHT_BY_POS[`${this.x},${this.y-2}`];
+        if(top_tile_height === undefined || top_tile_height <= this.z) return [];
+
+        let height_diff = top_tile_height - this.z;
+        let _anchor = height_diff >= 2? [3,2]: [2,1];
+        
+        return [[1,0], _anchor, [4,1], [3,0], [1,0]];
+    }
+
+    /**
+     * @returns  {[[x,y]...]} Array of points to form the diagonal shadow
+     */
+    cartesianShaderDiagonal() {
+        let higher_diagonal = this.getHigherDiagonalDiff();
+        if(higher_diagonal == 0) return [];
+
+        let height_diff = higher_diagonal - this.z;
+        let _anchor = height_diff >= 2? [3,2]: [2,1];
+
+        return [[1,0], _anchor, [1,2], [0,1], [1,0]];
     }
 }
