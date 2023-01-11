@@ -21,6 +21,18 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+
+    background: radial-gradient(var(--primary-black) 60%, black);
+}
+
+#main {
+    --shadow-color: #0a0a0a;
+    --shadow-blur: 0px;
+    --shadow-distance: 2px;
+    filter: drop-shadow(         var(--shadow-distance)           var(--shadow-distance)  var(--shadow-blur) var(--shadow-color))
+            drop-shadow(         var(--shadow-distance)  calc(-1* var(--shadow-distance)) var(--shadow-blur) var(--shadow-color))
+            drop-shadow(calc(-1* var(--shadow-distance))          var(--shadow-distance)  var(--shadow-blur) var(--shadow-color))
+            drop-shadow(calc(-1* var(--shadow-distance)) calc(-1* var(--shadow-distance)) var(--shadow-blur) var(--shadow-color));
 }
 
 #main {
