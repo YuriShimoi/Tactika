@@ -26,18 +26,16 @@ body {
 }
 
 #main {
-    --shadow-color: #0a0a0a;
+    margin-top: 100px;
+
+    --shadow-color: white;
     --shadow-blur: 0px;
     --shadow-distance: 2px;
-    filter: drop-shadow(         var(--shadow-distance)           var(--shadow-distance)  var(--shadow-blur) var(--shadow-color))
+    filter: drop-shadow(0 0 0 var(--secondary-black))
+            drop-shadow(         var(--shadow-distance)           var(--shadow-distance)  var(--shadow-blur) var(--shadow-color))
             drop-shadow(         var(--shadow-distance)  calc(-1* var(--shadow-distance)) var(--shadow-blur) var(--shadow-color))
             drop-shadow(calc(-1* var(--shadow-distance))          var(--shadow-distance)  var(--shadow-blur) var(--shadow-color))
             drop-shadow(calc(-1* var(--shadow-distance)) calc(-1* var(--shadow-distance)) var(--shadow-blur) var(--shadow-color));
-}
-
-#main {
-    margin-left: -40%;
-    margin-top: -20%;
 }
 
 .water-tile {

@@ -62,5 +62,10 @@
 .hxt-tile-shadow {
     opacity: 0.5;
     fill: black;
-    /* filter: blur(1px); */
+    /* filter: blur(1px);
+    stroke: var(--hxt-stroke-color);
+    stroke-width: var(--hxt-stroke-width); */
+}
+.hxt-tile-border:hover ~ .hxt-tile-shadow {
+    transform: translateY(calc(-1 * var(--hxt-border-width)));
 }
