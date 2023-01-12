@@ -202,7 +202,7 @@ class HexTile {
             let top_tile_height = _top_tile[0];
             let top_height_diff = top_tile_height - this.z;
             
-            let v1_top_height = calc_v1_height(_top_tile[4], this.y-2, top_tile_height, 4) - 2;
+            let v1_top_height = calc_v1_height(_top_tile[4], this.y-2, this.z, 4) - 2;
             if(v1_top_height > top_height_diff) top_height_diff = v1_top_height;
             
             if(top_height_diff > 0) {
@@ -219,7 +219,7 @@ class HexTile {
             let sid_tile_height = _sid_tile[0];
             let sid_height_diff = sid_tile_height - this.z;
             
-            let v1_sid_height = calc_v1_height(_sid_tile[4], this.y-1, sid_tile_height, 4) - 2;
+            let v1_sid_height = calc_v1_height(_sid_tile[4], this.y-1, this.z, 4) - 2;
             if(v1_sid_height > sid_height_diff) sid_height_diff = v1_sid_height;
     
             if(sid_height_diff > 0) {
