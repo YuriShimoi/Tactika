@@ -104,7 +104,7 @@ class HexTiler {
 class HexTile {
     static _ID_INCREMENT = 0;
 
-    // cache by {x,y} position
+    // cache by {x,y} position > format: `${_x},${_y}`
     static CACHE_HEIGHT_BY_POS = {};
     // cache by the 3 hexagon sides
     static CACHE_HEIGHT_BY_SID = {'s1': {}, 's2': {}, 's3': {}};
@@ -126,26 +126,27 @@ class HexTile {
 
         this.classes = _aditional_classes;
 
-        HexTile.CACHE_HEIGHT_BY_POS[`${_x},${_y}`] = _z;
-
         this.s1 = _x - Math.floor(_y/2);
         this.s2 = (_x * 2) + (_y % 2);
         this.s3 = _x + Math.ceil(_y/2);
         
-        if(this.s1 in HexTile.CACHE_HEIGHT_BY_SID.s1) HexTile.CACHE_HEIGHT_BY_SID.s1[String(this.s1)].push([this.x, this.y, this.z]);
-        else HexTile.CACHE_HEIGHT_BY_SID.s1[String(this.s1)] = [[this.x, this.y, this.z]];
-        if(this.s2 in HexTile.CACHE_HEIGHT_BY_SID.s2) HexTile.CACHE_HEIGHT_BY_SID.s2[String(this.s2)].push([this.x, this.y, this.z]);
-        else HexTile.CACHE_HEIGHT_BY_SID.s2[String(this.s2)] = [[this.x, this.y, this.z]];
-        if(this.s3 in HexTile.CACHE_HEIGHT_BY_SID.s3) HexTile.CACHE_HEIGHT_BY_SID.s3[String(this.s3)].push([this.x, this.y, this.z]);
-        else HexTile.CACHE_HEIGHT_BY_SID.s3[String(this.s3)] = [[this.x, this.y, this.z]];
+        if(this.s1 in HexTile.CACHE_HEIGHT_BY_SID.s1) HexTile.CACHE_HEIGHT_BY_SID.s1[String(this.s1)].push([_x, _y, _z]);
+        else HexTile.CACHE_HEIGHT_BY_SID.s1[String(this.s1)] = [[_x, _y, _z]];
+        if(this.s2 in HexTile.CACHE_HEIGHT_BY_SID.s2) HexTile.CACHE_HEIGHT_BY_SID.s2[String(this.s2)].push([_x, _y, _z]);
+        else HexTile.CACHE_HEIGHT_BY_SID.s2[String(this.s2)] = [[_x, _y, _z]];
+        if(this.s3 in HexTile.CACHE_HEIGHT_BY_SID.s3) HexTile.CACHE_HEIGHT_BY_SID.s3[String(this.s3)].push([_x, _y, _z]);
+        else HexTile.CACHE_HEIGHT_BY_SID.s3[String(this.s3)] = [[_x, _y, _z]];
 
-        this.v1 = parseFloat((2*_x) - (_y%2 == 1? (_y/3)-1: _y/3)).toFixed(1);
-        this.v2 = parseFloat((2*_x) + (_y%2 == 1? (_y/3)+1: _y/3)).toFixed(1);
+        this.v1 = parseFloat(parseFloat((2*_x) - (_y%2 == 1? (_y/3)-1: _y/3)).toFixed(1));
+        this.v2 = parseFloat(parseFloat((2*_x) + (_y%2 == 1? (_y/3)+1: _y/3)).toFixed(1));
 
-        if(this.v1 in HexTile.CACHE_HEIGHT_BY_VTX.v1) HexTile.CACHE_HEIGHT_BY_VTX.v1[String(this.v1)].push([this.x, this.y, this.z]);
-        else HexTile.CACHE_HEIGHT_BY_VTX.v1[String(this.v1)] = [[this.x, this.y, this.z]];
-        if(this.v2 in HexTile.CACHE_HEIGHT_BY_VTX.v2) HexTile.CACHE_HEIGHT_BY_VTX.v2[String(this.v2)].push([this.x, this.y, this.z]);
-        else HexTile.CACHE_HEIGHT_BY_VTX.v2[String(this.v2)] = [[this.x, this.y, this.z]];
+        if(this.v1 in HexTile.CACHE_HEIGHT_BY_VTX.v1) HexTile.CACHE_HEIGHT_BY_VTX.v1[String(this.v1)].push([_x, _y, _z]);
+        else HexTile.CACHE_HEIGHT_BY_VTX.v1[String(this.v1)] = [[_x, _y, _z]];
+        if(this.v2 in HexTile.CACHE_HEIGHT_BY_VTX.v2) HexTile.CACHE_HEIGHT_BY_VTX.v2[String(this.v2)].push([_x, _y, _z]);
+        else HexTile.CACHE_HEIGHT_BY_VTX.v2[String(this.v2)] = [[_x, _y, _z]];
+
+        
+        HexTile.CACHE_HEIGHT_BY_POS[`${_x},${_y}`] = [_z, this.s1, this.s2, this.s3, this.v1, this.v2];
     }
 
     
@@ -180,42 +181,57 @@ class HexTile {
      * @returns  {[[x,y]...]} Array of points to form the top shadow
      */
     cartesianShaderTop() {
+        const calc_v1_height = (_v1, _y, _z, max_height=2) => {
+            let _height = 0;
+            for(let _tile of HexTile.CACHE_HEIGHT_BY_VTX.v1[_v1]) {
+                if((_tile[1] <_y) && (_tile[2] >_z)) {
+                    // calc diff
+                    let _tile_diff = (_tile[2] -_z) - (((((_y - _tile[1])/3)- 1) * 3) + 1);
+                    if(_tile_diff > _height) _height = _tile_diff;
+                    if(_height >= max_height) break;
+                }
+            }
+            return _height;
+        };
+
         let shadow_map = [0,0,0,0,0,0];
 
         //#region [Top Tile]
-        let top_tile_height = HexTile.CACHE_HEIGHT_BY_POS[`${this.x},${this.y-2}`];
-        let top_height_diff = top_tile_height - this.z;
-        if(top_height_diff > 0) {
-            shadow_map[0] = 1;
-            shadow_map[1] = 1;
-            if(top_height_diff >= 2) shadow_map[2] = 1;
+        let _top_tile = HexTile.CACHE_HEIGHT_BY_POS[`${this.x},${this.y-2}`] || false;
+        if(_top_tile) {
+            let top_tile_height = _top_tile[0];
+            let top_height_diff = top_tile_height - this.z;
+            
+            let v1_top_height = calc_v1_height(_top_tile[4], this.y-2, top_tile_height, 4) - 2;
+            if(v1_top_height > top_height_diff) top_height_diff = v1_top_height;
+            
+            if(top_height_diff > 0) {
+                shadow_map[0] = 1;
+                shadow_map[1] = 1;
+                if(top_height_diff >= 2) shadow_map[2] = 1;
+            }
         }
-
-        // TODO: V1 from here
         //#endregion
 
         //#region [S1 first tile]
-        let sid_tile_height = HexTile.CACHE_HEIGHT_BY_POS[`${this.y%2?this.x: this.x-1},${this.y-1}`];
-        let sid_height_diff = sid_tile_height - this.z;
-        if(sid_height_diff > 0) {
-            shadow_map[5] = 1;
-            shadow_map[4] = 1;
-            if(sid_height_diff >= 2) shadow_map[3] = 1;
+        let _sid_tile = HexTile.CACHE_HEIGHT_BY_POS[`${this.y%2?this.x: this.x-1},${this.y-1}`] || false;
+        if(_sid_tile) {
+            let sid_tile_height = _sid_tile[0];
+            let sid_height_diff = sid_tile_height - this.z;
+            
+            let v1_sid_height = calc_v1_height(_sid_tile[4], this.y-1, sid_tile_height, 4) - 2;
+            if(v1_sid_height > sid_height_diff) sid_height_diff = v1_sid_height;
+    
+            if(sid_height_diff > 0) {
+                shadow_map[5] = 1;
+                shadow_map[4] = 1;
+                if(sid_height_diff >= 2) shadow_map[3] = 1;
+            }
         }
-
-        // TODO: V1 from here
         //#endregion
         
         //#region [V1 Tiles]
-        let sid_height_vtx = 0;
-        for(let _tile of HexTile.CACHE_HEIGHT_BY_VTX.v1[this.v1]) {
-            if((_tile[1] < this.y) && (_tile[2] > this.z)) {
-                // calc diff
-                let _tile_diff = (_tile[2] - this.z) - (((((this.y - _tile[1])/3)- 1) * 3) + 1);
-                if(_tile_diff > sid_height_vtx) sid_height_vtx = _tile_diff;
-                if(sid_height_vtx >= 2) break;
-            }
-        }
+        let sid_height_vtx = calc_v1_height(this.v1, this.y, this.z);
         if(sid_height_vtx > 0) {
             if(sid_height_vtx >= 2) shadow_map = [1,1,1,1,1,1];
             else {

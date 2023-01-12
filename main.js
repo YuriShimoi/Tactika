@@ -1,6 +1,6 @@
 const ELEMENT = document.getElementById("main");
 
-let MAPPING = [new HexTile(1, 6, 10), new HexTile(2, 6, 9), new HexTile(3, 6, 7)];
+let MAPPING = [new HexTile(1, 6, 10), new HexTile(2, 6, 9), new HexTile(3, 6, 8)];
 
 for(let _y=0; _y<20; _y++) {
     for(let _x=0; _x<5; _x++) {
@@ -10,7 +10,6 @@ for(let _y=0; _y<20; _y++) {
 
 function start() {
     HexTiler.draw(ELEMENT, MAPPING);
-    // hihi
 }
 
 start();
