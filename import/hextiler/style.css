@@ -68,4 +68,6 @@
 }
 .hxt-tile-border:hover ~ .hxt-tile-shadow {
     transform: translateY(calc(-1 * var(--hxt-border-width)));
+    stroke: var(--hxt-hover-border-color);
+    stroke-width: var(--hxt-border-width);
 }
