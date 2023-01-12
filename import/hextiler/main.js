@@ -139,8 +139,8 @@ class HexTile {
         if(this.s3 in HexTile.CACHE_HEIGHT_BY_SID.s3) HexTile.CACHE_HEIGHT_BY_SID.s3[String(this.s3)].push([this.x, this.y, this.z]);
         else HexTile.CACHE_HEIGHT_BY_SID.s3[String(this.s3)] = [[this.x, this.y, this.z]];
 
-        this.v1 = (2*_x) - (_y%2 == 1? (_y/3)-1: _y/3);
-        this.v2 = (2*_x) + (_y%2 == 1? (_y/3)+1: _y/3);
+        this.v1 = parseFloat((2*_x) - (_y%2 == 1? (_y/3)-1: _y/3)).toFixed(1);
+        this.v2 = parseFloat((2*_x) + (_y%2 == 1? (_y/3)+1: _y/3)).toFixed(1);
 
         if(this.v1 in HexTile.CACHE_HEIGHT_BY_VTX.v1) HexTile.CACHE_HEIGHT_BY_VTX.v1[String(this.v1)].push([this.x, this.y, this.z]);
         else HexTile.CACHE_HEIGHT_BY_VTX.v1[String(this.v1)] = [[this.x, this.y, this.z]];
@@ -190,23 +190,20 @@ class HexTile {
             shadow_map[1] = 1;
             if(top_height_diff >= 2) shadow_map[2] = 1;
         }
+
+        // TODO: V1 from here
         //#endregion
 
-        //#region [S1 Tiles]
-        let sid_height_diff = 0;
-        for(let _tile of HexTile.CACHE_HEIGHT_BY_SID.s1[this.s1]) {
-            if((_tile[1] < this.y) && (_tile[2] > this.z)) {
-                // calc diff
-                let _tile_diff = (_tile[2] - this.z) - (((this.y - _tile[1]) - 1) * 2);
-                if(_tile_diff > sid_height_diff) sid_height_diff = _tile_diff;
-                if(sid_height_diff >= 2) break;
-            }
-        }
+        //#region [S1 first tile]
+        let sid_tile_height = HexTile.CACHE_HEIGHT_BY_POS[`${this.y%2?this.x: this.x-1},${this.y-1}`];
+        let sid_height_diff = sid_tile_height - this.z;
         if(sid_height_diff > 0) {
             shadow_map[5] = 1;
             shadow_map[4] = 1;
             if(sid_height_diff >= 2) shadow_map[3] = 1;
         }
+
+        // TODO: V1 from here
         //#endregion
         
         //#region [V1 Tiles]
@@ -214,7 +211,7 @@ class HexTile {
         for(let _tile of HexTile.CACHE_HEIGHT_BY_VTX.v1[this.v1]) {
             if((_tile[1] < this.y) && (_tile[2] > this.z)) {
                 // calc diff
-                let _tile_diff = (_tile[2] - this.z) - (((this.y/3 - _tile[1]/3) * 2) - 1);
+                let _tile_diff = (_tile[2] - this.z) - (((((this.y - _tile[1])/3)- 1) * 3) + 1);
                 if(_tile_diff > sid_height_vtx) sid_height_vtx = _tile_diff;
                 if(sid_height_vtx >= 2) break;
             }
