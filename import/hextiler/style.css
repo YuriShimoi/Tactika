@@ -62,4 +62,5 @@
 .hxt-tile-shadow {
     opacity: 0.5;
     fill: black;
+    /* filter: blur(1px); */
 }

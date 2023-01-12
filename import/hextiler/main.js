@@ -20,13 +20,19 @@ class HexTiler {
      * @param {HexTile} _tile - Tile instance that will be draw
      */
     static drawTile(_element, _tile) {
+        //#region [Initialization]
         let containerHTML = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         containerHTML.id = `hxt-tile-${_tile.id}`;
         containerHTML.classList.add("hxt-tile", ..._tile.classes);
 
-        containerHTML.setAttribute('da', _tile.da);
-        containerHTML.setAttribute('db', _tile.db);
-        containerHTML.setAttribute('dc', _tile.dc);
+        containerHTML.setAttribute('x', _tile.x);
+        containerHTML.setAttribute('y', _tile.y);
+        containerHTML.setAttribute('z', _tile.z);
+        containerHTML.setAttribute('s1', _tile.s1);
+        containerHTML.setAttribute('s2', _tile.s2);
+        containerHTML.setAttribute('s3', _tile.s3);
+        containerHTML.setAttribute('v1', _tile.v1);
+        containerHTML.setAttribute('v2', _tile.v2);
 
         let tile_height = _tile.z * HexTiler.config.step_height;
         containerHTML.setAttribute('height', (2 + tile_height) * HexTiler.config.scale);
@@ -36,7 +42,9 @@ class HexTiler {
         let _left = (_tile.x * 6 + even_adjust) * HexTiler.config.scale;// + (_tile.x * 1);
         let _top  = (_tile.y - _tile.z) * HexTiler.config.scale;// + (_tile.y * 1);
         containerHTML.style = `z-index: ${_tile.y};margin-left: ${_left}px; margin-top: ${_top}px`;
+        //#endregion
 
+        //#region [Polygon]
         // total_border
         let tile_border = HexTiler.polygonFromPoints(_tile.cartesianTotal(), containerHTML);
         tile_border.classList.add("hxt-tile-border");
@@ -50,6 +58,7 @@ class HexTiler {
         containerHTML.appendChild(tile_border);
         containerHTML.appendChild(tile_lateral);
         containerHTML.appendChild(tile_floor);
+        //#endregion
 
         //#region [Shaders]
         let tile_shader_minimal = HexTiler.polygonFromPoints(_tile.cartesianShaderMinimal(), containerHTML);
@@ -95,7 +104,12 @@ class HexTiler {
 class HexTile {
     static _ID_INCREMENT = 0;
 
-    static CACHE_HEIGHT_BY_POS = {'da': {}, 'db': {}, 'dc': {}};
+    // cache by {x,y} position
+    static CACHE_HEIGHT_BY_POS = {};
+    // cache by the 3 hexagon sides
+    static CACHE_HEIGHT_BY_SID = {'s1': {}, 's2': {}, 's3': {}};
+    // cache by the 2 hexagon diagonal vertices, since horizontal one is this.x
+    static CACHE_HEIGHT_BY_VTX = {'v1': {}, 'v2': {}};
     
     /** Tile instance use on HexTiler
      * @param {Number} _x - Horizontal position
@@ -110,20 +124,28 @@ class HexTile {
         this.y = _y;
         this.z = _z;
 
-        this.da = _x - Math.floor(_y/2);
-        this.db = (_x * 2) + (_y % 2);
-        this.dc = _x + Math.ceil(_y/2);
-
         this.classes = _aditional_classes;
 
         HexTile.CACHE_HEIGHT_BY_POS[`${_x},${_y}`] = _z;
+
+        this.s1 = _x - Math.floor(_y/2);
+        this.s2 = (_x * 2) + (_y % 2);
+        this.s3 = _x + Math.ceil(_y/2);
         
-        if(this.da in HexTile.CACHE_HEIGHT_BY_POS.da) HexTile.CACHE_HEIGHT_BY_POS.da[this.da].push([this.x, this.y, this.z]);
-        else HexTile.CACHE_HEIGHT_BY_POS.da[this.da] = [this.x, this.y, this.z];
-        if(this.db in HexTile.CACHE_HEIGHT_BY_POS.db) HexTile.CACHE_HEIGHT_BY_POS.db[this.db].push([this.x, this.y, this.z]);
-        else HexTile.CACHE_HEIGHT_BY_POS.db[this.db] = [this.x, this.y, this.z];
-        if(this.dc in HexTile.CACHE_HEIGHT_BY_POS.dc) HexTile.CACHE_HEIGHT_BY_POS.dc[this.dc].push([this.x, this.y, this.z]);
-        else HexTile.CACHE_HEIGHT_BY_POS.dc[this.dc] = [this.x, this.y, this.z];
+        if(this.s1 in HexTile.CACHE_HEIGHT_BY_SID.s1) HexTile.CACHE_HEIGHT_BY_SID.s1[String(this.s1)].push([this.x, this.y, this.z]);
+        else HexTile.CACHE_HEIGHT_BY_SID.s1[String(this.s1)] = [[this.x, this.y, this.z]];
+        if(this.s2 in HexTile.CACHE_HEIGHT_BY_SID.s2) HexTile.CACHE_HEIGHT_BY_SID.s2[String(this.s2)].push([this.x, this.y, this.z]);
+        else HexTile.CACHE_HEIGHT_BY_SID.s2[String(this.s2)] = [[this.x, this.y, this.z]];
+        if(this.s3 in HexTile.CACHE_HEIGHT_BY_SID.s3) HexTile.CACHE_HEIGHT_BY_SID.s3[String(this.s3)].push([this.x, this.y, this.z]);
+        else HexTile.CACHE_HEIGHT_BY_SID.s3[String(this.s3)] = [[this.x, this.y, this.z]];
+
+        this.v1 = (2*_x) - (_y%2 == 1? (_y/3)-1: _y/3);
+        this.v2 = (2*_x) + (_y%2 == 1? (_y/3)+1: _y/3);
+
+        if(this.v1 in HexTile.CACHE_HEIGHT_BY_VTX.v1) HexTile.CACHE_HEIGHT_BY_VTX.v1[String(this.v1)].push([this.x, this.y, this.z]);
+        else HexTile.CACHE_HEIGHT_BY_VTX.v1[String(this.v1)] = [[this.x, this.y, this.z]];
+        if(this.v2 in HexTile.CACHE_HEIGHT_BY_VTX.v2) HexTile.CACHE_HEIGHT_BY_VTX.v2[String(this.v2)].push([this.x, this.y, this.z]);
+        else HexTile.CACHE_HEIGHT_BY_VTX.v2[String(this.v2)] = [[this.x, this.y, this.z]];
     }
 
     
@@ -158,12 +180,74 @@ class HexTile {
      * @returns  {[[x,y]...]} Array of points to form the top shadow
      */
     cartesianShaderTop() {
-        let top_tile_height = HexTile.CACHE_HEIGHT_BY_POS[`${this.x},${this.y-2}`];
-        if(top_tile_height === undefined || top_tile_height <= this.z) return [];
+        let shadow_map = [0,0,0,0,0,0];
 
-        let height_diff = top_tile_height - this.z;
-        let _anchor = height_diff >= 2? [3,2]: [2,1];
+        //#region [Top Tile]
+        let top_tile_height = HexTile.CACHE_HEIGHT_BY_POS[`${this.x},${this.y-2}`];
+        let top_height_diff = top_tile_height - this.z;
+        if(top_height_diff > 0) {
+            shadow_map[0] = 1;
+            shadow_map[1] = 1;
+            if(top_height_diff >= 2) shadow_map[2] = 1;
+        }
+        //#endregion
+
+        //#region [S1 Tiles]
+        let sid_height_diff = 0;
+        for(let _tile of HexTile.CACHE_HEIGHT_BY_SID.s1[this.s1]) {
+            if((_tile[1] < this.y) && (_tile[2] > this.z)) {
+                // calc diff
+                let _tile_diff = (_tile[2] - this.z) - (((this.y - _tile[1]) - 1) * 2);
+                if(_tile_diff > sid_height_diff) sid_height_diff = _tile_diff;
+                if(sid_height_diff >= 2) break;
+            }
+        }
+        if(sid_height_diff > 0) {
+            shadow_map[5] = 1;
+            shadow_map[4] = 1;
+            if(sid_height_diff >= 2) shadow_map[3] = 1;
+        }
+        //#endregion
         
-        return [[1,0], _anchor, [4,1], [3,0], [1,0]];
+        //#region [V1 Tiles]
+        let sid_height_vtx = 0;
+        for(let _tile of HexTile.CACHE_HEIGHT_BY_VTX.v1[this.v1]) {
+            if((_tile[1] < this.y) && (_tile[2] > this.z)) {
+                // calc diff
+                let _tile_diff = (_tile[2] - this.z) - (((this.y/3 - _tile[1]/3) * 2) - 1);
+                if(_tile_diff > sid_height_vtx) sid_height_vtx = _tile_diff;
+                if(sid_height_vtx >= 2) break;
+            }
+        }
+        if(sid_height_vtx > 0) {
+            if(sid_height_vtx >= 2) shadow_map = [1,1,1,1,1,1];
+            else {
+                shadow_map[0] = 1;
+                shadow_map[5] = 1;
+            }
+        }
+        //#endregion
+
+        //#region [Shadow Mapping]
+        let _result   = [];
+        let _refcord  = [[3,0], [4,1], [3,2], [1,2], [0,1], [1,0]];
+        let _centered = false;
+        for(let sm in shadow_map) {
+            if(shadow_map[sm]) {
+                if(_result.length == 0) _result = [[1,0]];
+                if(_centered) _result.push(_refcord[sm-1]);
+                _result.push(_refcord[sm]);
+                _centered = false;
+            }
+            else if(!_centered) {
+                _result.push([2,1]); // center
+                _centered = true;
+            }
+        }
+        if(_result.length == 1) _result = [];
+        else _result.push([..._result[_result.length-1]]);
+        //#endregion
+
+        return _result;
     }
 }
