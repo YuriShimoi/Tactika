@@ -186,7 +186,7 @@ class HexTile {
             for(let _tile of HexTile.CACHE_HEIGHT_BY_VTX.v1[_v1]) {
                 if((_tile[1] <_y) && (_tile[2] >_z)) {
                     // calc diff
-                    let _tile_diff = (_tile[2] -_z) - (((((_y - _tile[1])/3)- 1) * 3) + 1);
+                    let _tile_diff = (_tile[2] -_z) - ((_y - _tile[1]) - 2);
                     if(_tile_diff > _height) _height = _tile_diff;
                     if(_height >= max_height) break;
                 }
