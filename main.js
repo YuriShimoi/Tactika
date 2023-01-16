@@ -1,16 +1,19 @@
 const ELEMENT = document.getElementById("main");
 
-let MAPPING = [new HexTile(1, 6, 10), new HexTile(2, 6, 9), new HexTile(3, 6, 8)];
+let DEFAULT_TEXTURE = ["img/floor.png", "img/lateral.png"];
+let MAPPING = [new HexTile(1, 6, 10, [], DEFAULT_TEXTURE), new HexTile(2, 6, 9, [], DEFAULT_TEXTURE), new HexTile(3, 6, 8, [], DEFAULT_TEXTURE)];
 
 for(let _y=0; _y<20; _y++) {
     for(let _x=0; _x<5; _x++) {
         let _classes = [];
+        let _texture = DEFAULT_TEXTURE;
         let _z = 2;
         if(_y>12) {
+            _texture = ["img/water.png","img/water.png"];
             _classes = ['water-tile'];
             _z = 1;
         }
-        if(!(_x == 1 && _y == 6) && !(_x == 2 && _y == 6) && !(_x == 3 && _y == 6)) MAPPING.push(new HexTile(_x, _y, _z, _classes));
+        if(!(_x == 1 && _y == 6) && !(_x == 2 && _y == 6) && !(_x == 3 && _y == 6)) MAPPING.push(new HexTile(_x, _y, _z, _classes, _texture));
     }
 }
 
@@ -32,7 +35,7 @@ function adjustSizes() {
         if(_lowest.left === null || _viewportOffset.left < _lowest.left)
             _lowest.left = _viewportOffset.left;
     }
-    console.log(_lowest);
+    
     let _width  = document.body.offsetWidth  - (_lowest.left + _lowest.right);
     let _height = document.body.offsetHeight - (_lowest.top  + _lowest.bottom);
     _main.style.width  = `${_width}px`;

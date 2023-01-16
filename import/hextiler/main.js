@@ -56,8 +56,25 @@ class HexTiler {
         tile_floor.classList.add("hxt-tile-floor");
 
         containerHTML.appendChild(tile_border);
-        containerHTML.appendChild(tile_lateral);
-        containerHTML.appendChild(tile_floor);
+
+        if(_tile.texture[1]) {
+            let [_mask, _image] = HexTiler.maskPolygon(`tile-lateral-${_tile.id}`, _tile.texture[1]);
+            _mask.appendChild(tile_lateral);
+            containerHTML.appendChild(_mask);
+            containerHTML.appendChild(_image);
+        }
+        else {
+            containerHTML.appendChild(tile_lateral);
+        }
+        if(_tile.texture[0]) {
+            let [_mask, _image] = HexTiler.maskPolygon(`tile-floor-${_tile.id}`, _tile.texture[0]);
+            _mask.appendChild(tile_floor);
+            containerHTML.appendChild(_mask);
+            containerHTML.appendChild(_image);
+        }
+        else {
+            containerHTML.appendChild(tile_floor);
+        }
         //#endregion
 
         //#region [Shaders]
@@ -99,6 +116,18 @@ class HexTiler {
         }
         return _polygon;
     }
+
+    static maskPolygon(_id, _texture) {
+        let maskContainer = document.createElementNS("http://www.w3.org/2000/svg", "mask");
+        maskContainer.id = _id;
+
+        let maskImage = document.createElementNS("http://www.w3.org/2000/svg", "image");
+        maskImage.setAttribute("mask", `url(#${_id})`);
+        maskImage.setAttribute("href", _texture);
+        maskImage.style.width = `${HexTiler.config.scale * 4}px`;
+
+        return [maskContainer, maskImage];
+    }
 }
 
 class HexTile {
@@ -117,7 +146,7 @@ class HexTile {
      * @param {Number} _z - Tile height
      * @param {[String]} _aditional_classes - Array of Tile Element aditional classes
      */
-    constructor(_x, _y, _z=1, _aditional_classes=[]) {
+    constructor(_x, _y, _z=1, _aditional_classes=[], _textures=["",""]) {
         this.id = HexTile._ID_INCREMENT++;
 
         this.x = _x;
@@ -125,6 +154,7 @@ class HexTile {
         this.z = _z;
 
         this.classes = _aditional_classes;
+        this.texture = _textures;
 
         this.s1 = _x - Math.floor(_y/2);
         this.s2 = (_x * 2) + (_y % 2);

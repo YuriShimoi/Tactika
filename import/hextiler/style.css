@@ -32,6 +32,17 @@
     --hxt-stroke-color: var(--hxt-default-stroke-color);
 }
 
+.hxt-tile > mask > polygon {
+    fill: #ffffff !important;
+}
+.hxt-tile > mask + image {
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+}
+.hxt-tile-border:hover ~ image {
+    /* transform: translateY(calc(-1 * var(--hxt-border-width))); */
+}
+
 .hxt-tile-border {
     stroke: var(--hxt-border-color);
     stroke-width: var(--hxt-border-width);
@@ -53,7 +64,8 @@
 
 .hxt-tile-border:hover,
 .hxt-tile-border:hover ~ .hxt-tile-floor,
-.hxt-tile-border:hover ~ .hxt-tile-lateral {
+.hxt-tile-border:hover ~ .hxt-tile-lateral,
+.hxt-tile-border:hover ~ .hxt-tile-shadow {
     stroke: var(--hxt-hover-border-color);
     stroke-width: var(--hxt-border-width);
     transform: translateY(calc(-1 * var(--hxt-border-width)));
@@ -65,9 +77,4 @@
     /* filter: blur(1px);
     stroke: var(--hxt-stroke-color);
     stroke-width: var(--hxt-stroke-width); */
-}
-.hxt-tile-border:hover ~ .hxt-tile-shadow {
-    transform: translateY(calc(-1 * var(--hxt-border-width)));
-    stroke: var(--hxt-hover-border-color);
-    stroke-width: var(--hxt-border-width);
 }
