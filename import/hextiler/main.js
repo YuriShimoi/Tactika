@@ -45,17 +45,20 @@ class HexTiler {
         //#endregion
 
         //#region [Polygon]
-        // total_border
-        let tile_border = HexTiler.polygonFromPoints(_tile.cartesianTotal(), containerHTML);
-        tile_border.classList.add("hxt-tile-border");
+        // total_collision
+        let tile_collision = HexTiler.polygonFromPoints(_tile.cartesianTotal(), containerHTML);
+        tile_collision.classList.add("hxt-tile-collision");
         // lateral
         let tile_lateral = HexTiler.polygonFromPoints(_tile.cartesianTotal(), containerHTML);
         tile_lateral.classList.add("hxt-tile-lateral");
         // floor
         let tile_floor = HexTiler.polygonFromPoints(_tile.cartesianFloor(), containerHTML);
         tile_floor.classList.add("hxt-tile-floor");
+        // total_border
+        let tile_border = HexTiler.polygonFromPoints(_tile.cartesianBorder(), containerHTML);
+        tile_border.classList.add("hxt-tile-border");
 
-        containerHTML.appendChild(tile_border);
+        containerHTML.appendChild(tile_collision);
 
         if(_tile.texture[1]) {
             let [_mask, _image] = HexTiler.maskPolygon(`tile-lateral-${_tile.id}`, _tile.texture[1]);
@@ -87,6 +90,9 @@ class HexTiler {
         containerHTML.appendChild(tile_shader_minimal);
         containerHTML.appendChild(tile_shader_top);
         //#endregion
+
+        // Must be last added to overide everything
+        containerHTML.appendChild(tile_border);
 
         _element.appendChild(containerHTML);
     }
@@ -195,6 +201,16 @@ class HexTile {
         if(_height <= 0) return this.cartesianFloor();
 
         return [[1,0], [3,0], [4,1], [4,1+_height], [3,2+_height], [1,2+_height], [0,1+_height], [0,1], [1,0]];
+    }
+
+    /**
+     * @returns  {[[x,y]...]} Array of points to form the entire tile bordering
+     */
+    cartesianBorder() {
+        let _height = this.z * HexTiler.config.step_height;
+        if(_height <= 0) return this.cartesianFloor();
+
+        return [[0,1], [1,0], [3,0], [4,1], [4,1+_height], [3,2+_height], [1,2+_height], [0,1+_height], [0,1], [1,2], [3,2], [4,1], [3,0], [1,0]];
     }
 
     /**

@@ -39,14 +39,15 @@
     image-rendering: crisp-edges;
     image-rendering: pixelated;
 }
-.hxt-tile-border:hover ~ image {
-    /* transform: translateY(calc(-1 * var(--hxt-border-width))); */
+
+.hxt-tile-collision {
+    pointer-events: all;
 }
 
 .hxt-tile-border {
+    fill: none;
     stroke: var(--hxt-border-color);
     stroke-width: var(--hxt-border-width);
-    pointer-events: all;
 }
 
 .hxt-tile-floor {
@@ -57,15 +58,10 @@
 }
 .hxt-tile-floor,
 .hxt-tile-lateral {
-    stroke: var(--hxt-stroke-color);
-    stroke-width: var(--hxt-stroke-width);
     pointer-events: none;
 }
 
-.hxt-tile-border:hover,
-.hxt-tile-border:hover ~ .hxt-tile-floor,
-.hxt-tile-border:hover ~ .hxt-tile-lateral,
-.hxt-tile-border:hover ~ .hxt-tile-shadow {
+.hxt-tile-collision:hover ~ .hxt-tile-border {
     stroke: var(--hxt-hover-border-color);
     stroke-width: var(--hxt-border-width);
     transform: translateY(calc(-1 * var(--hxt-border-width)));
