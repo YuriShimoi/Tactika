@@ -38,11 +38,13 @@ body {
             drop-shadow(calc(-1* var(--shadow-distance)) calc(-1* var(--shadow-distance)) var(--shadow-blur) var(--shadow-color));
 }
 
+.grass-tile {
+    --hxt-stroke-color : #062500;
+    --hxt-border-color : #062500;
+}
+
 .water-tile {
     opacity: 0.8;
-
-    --hxt-floor-color  : #3191ff;
-    --hxt-lateral-color: #0077ff;
     --hxt-stroke-color : #ffffff22;
     --hxt-border-color : #ffffff22;
 }

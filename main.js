@@ -1,11 +1,11 @@
 const ELEMENT = document.getElementById("main");
 
 let DEFAULT_TEXTURE = ["img/floor.png", "img/lateral.png"];
-let MAPPING = [new HexTile(1, 6, 10, [], DEFAULT_TEXTURE), new HexTile(2, 6, 9, [], DEFAULT_TEXTURE), new HexTile(3, 6, 8, [], DEFAULT_TEXTURE)];
+let MAPPING = [new HexTile(1, 6, 10, ["grass-tile"], DEFAULT_TEXTURE), new HexTile(2, 6, 9, ["grass-tile"], DEFAULT_TEXTURE), new HexTile(3, 6, 8, ["grass-tile"], DEFAULT_TEXTURE)];
 
 for(let _y=0; _y<20; _y++) {
     for(let _x=0; _x<5; _x++) {
-        let _classes = [];
+        let _classes = ["grass-tile"];
         let _texture = DEFAULT_TEXTURE;
         let _z = 2;
         if(_y>12) {

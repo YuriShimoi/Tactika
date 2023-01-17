@@ -1,6 +1,6 @@
 class HexTiler {
     static config = {
-        'scale': 20,
+        'scale': 24,
         'step_height': 1
     };
 
