@@ -79,32 +79,57 @@ function start() {
     HexTiler.draw(ELEMENT, MAPPING);
     centerContainer();
 
-    document.body.onmousedown =
-    document.body.touchstart = (_mouse_event) => {
+    document.body.onmousedown = (_mouse_event) => {
         MOUSE.active = true;
         MOUSE.origin_x = _mouse_event.pageX;
         MOUSE.origin_y = _mouse_event.pageY;
     };
-    document.body.onmousemove =
-    document.body.touchmove = (_mouse_event) => {
+    document.body.touchstart = (_touch_event) => {
+        _touch = _touch_event.changedTouches[0];
+
+        MOUSE.active = true;
+        MOUSE.origin_x = _touch.pageX;
+        MOUSE.origin_y = _touch.pageY;
+    };
+
+    document.body.onmousemove = (_mouse_event) => {
+        _mouse_event.preventDefault();
         if(MOUSE.active) {
             let _move_x = (_mouse_event.pageX - MOUSE.origin_x)*2;
             let _move_y = (_mouse_event.pageY - MOUSE.origin_y)*2;
             setContainerPos(ANCHOR.x + _move_x, ANCHOR.y + _move_y);
         }
     };
+    document.body.touchmove = (_touch_event) => {
+        _touch_event.preventDefault();
+        if(MOUSE.active) {
+            _touch = _touch_event.changedTouches[0];
+            
+            let _move_x = (_touch.pageX - MOUSE.origin_x)*2;
+            let _move_y = (_touch.pageY - MOUSE.origin_y)*2;
+            setContainerPos(ANCHOR.x + _move_x, ANCHOR.y + _move_y);
+        }
+        
+    };
+
     document.body.onmouseup =
-    document.body.onmouseleave =
-    document.body.touchend =
-    document.body.touchcancel = (_mouse_event) => {
+    document.body.onmouseleave = (_mouse_event) => {
+        _mouse_event.preventDefault();
         MOUSE.active = false;
 
-        let _move_x = (_mouse_event.pageX - MOUSE.origin_x)*2;
-        let _move_y = (_mouse_event.pageY - MOUSE.origin_y)*2;
-
-        ANCHOR.x += _move_x;
-        ANCHOR.y += _move_y;
+        ANCHOR.x += (_mouse_event.pageX - MOUSE.origin_x)*2;
+        ANCHOR.y += (_mouse_event.pageY - MOUSE.origin_y)*2;
     };
+    document.body.touchend =
+    document.body.touchcancel = (_touch_event) => {
+        _touch_event.preventDefault();
+        _touch = _touch_event.changedTouches[0];
+
+        MOUSE.active = false;
+
+        ANCHOR.x += (_mouse_event.pageX - MOUSE.origin_x)*2;
+        ANCHOR.y += (_mouse_event.pageY - MOUSE.origin_y)*2;
+    }
 }
 
 start();
