@@ -65,6 +65,7 @@
     stroke: var(--hxt-hover-border-color);
     stroke-width: var(--hxt-border-width);
     transform: translateY(calc(-1 * var(--hxt-border-width)));
+    filter: drop-shadow(0 1px var(--hxt-hover-border-color));
 }
 
 .hxt-tile-shadow {
