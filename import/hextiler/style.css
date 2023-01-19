@@ -1,15 +1,15 @@
 :root {
-    --hxt-default-floor-color  : #bbbbbb;
-    --hxt-default-lateral-color: #999999;
+    --hxt-default-floor-color  : #dddddd;
+    --hxt-default-lateral-color: #aaaaaa;
 
     --hxt-default-hover-border-color: white;
     --hxt-default-hover-border-width: 2px;
 
     --hxt-default-border-width: 2px;
-    --hxt-default-border-color: #161616;
+    --hxt-default-border-color: #0a0a0a;
 
     --hxt-default-stroke-width: 2px;
-    --hxt-default-stroke-color: #161616;
+    --hxt-default-stroke-color: #0a0a0a;
 }
 
 .hxt-tile {
@@ -32,10 +32,22 @@
     --hxt-stroke-color: var(--hxt-default-stroke-color);
 }
 
+.hxt-tile > mask > polygon {
+    fill: #ffffff !important;
+}
+.hxt-tile > mask + image {
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+}
+
+.hxt-tile-collision {
+    pointer-events: all;
+}
+
 .hxt-tile-border {
+    fill: none;
     stroke: var(--hxt-border-color);
     stroke-width: var(--hxt-border-width);
-    pointer-events: all;
 }
 
 .hxt-tile-floor {
@@ -46,15 +58,20 @@
 }
 .hxt-tile-floor,
 .hxt-tile-lateral {
-    stroke: var(--hxt-stroke-color);
-    stroke-width: var(--hxt-stroke-width);
     pointer-events: none;
 }
 
-.hxt-tile-border:hover,
-.hxt-tile-border:hover ~ .hxt-tile-floor,
-.hxt-tile-border:hover ~ .hxt-tile-lateral {
+.hxt-tile-collision:hover ~ .hxt-tile-border {
     stroke: var(--hxt-hover-border-color);
     stroke-width: var(--hxt-border-width);
     transform: translateY(calc(-1 * var(--hxt-border-width)));
+    filter: drop-shadow(0 1px var(--hxt-hover-border-color));
+}
+
+.hxt-tile-shadow {
+    opacity: 0.5;
+    fill: black;
+    /* filter: blur(1px);
+    stroke: var(--hxt-stroke-color);
+    stroke-width: var(--hxt-stroke-width); */
 }

@@ -15,19 +15,36 @@ html, body {
     margin: 0;
     width: 100%;
     height: 100%;
+    overflow: hidden;
 }
 
 body {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
+
+    background: radial-gradient(var(--primary-black) 60%, black);
+}
+
+#main {
+    --shadow-color: white;
+    --shadow-blur: 0px;
+    --shadow-distance: 2px;
+    filter: drop-shadow(0 0 0 black)
+            drop-shadow(         var(--shadow-distance)           var(--shadow-distance)  var(--shadow-blur) var(--shadow-color))
+            drop-shadow(         var(--shadow-distance)  calc(-1* var(--shadow-distance)) var(--shadow-blur) var(--shadow-color))
+            drop-shadow(calc(-1* var(--shadow-distance))          var(--shadow-distance)  var(--shadow-blur) var(--shadow-color))
+            drop-shadow(calc(-1* var(--shadow-distance)) calc(-1* var(--shadow-distance)) var(--shadow-blur) var(--shadow-color));
+}
+
+.grass-tile {
+    --hxt-stroke-color : #093500;
+    --hxt-border-color : #093500;
 }
 
 .water-tile {
     opacity: 0.8;
-
-    --hxt-floor-color  : #3191ff;
-    --hxt-lateral-color: #0077ff;
     --hxt-stroke-color : #ffffff22;
     --hxt-border-color : #ffffff22;
 }
