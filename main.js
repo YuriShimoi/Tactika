@@ -80,9 +80,11 @@ function start() {
     centerContainer();
 
     document.body.onmousedown = (_mouse_event) => {
-        MOUSE.active = true;
-        MOUSE.origin_x = _mouse_event.pageX;
-        MOUSE.origin_y = _mouse_event.pageY;
+        if(_mouse_event.button === 1) {
+            MOUSE.active = true;
+            MOUSE.origin_x = _mouse_event.pageX;
+            MOUSE.origin_y = _mouse_event.pageY;
+        }
     };
     document.body.touchstart = (_touch_event) => {
         _touch = _touch_event.changedTouches[0];
