@@ -6,7 +6,7 @@ class HexTiler {
 
     /** Draw every non drawed tiles
      * @param {HTMLElement} _element - Parent element
-     * @param {[HexTile]}   _mapping - Array of Tile instances
+     * @param {HexTile[]}   _mapping - Array of Tile instances
      */
     static draw(_element, _mapping) {
         for(let _tile of _mapping) {
@@ -106,7 +106,7 @@ class HexTiler {
     }
 
     /** Creates an SVG Polygon element from given points
-     * @param {[[x,y]...]} _points - Array of cartesian positions
+     * @param {[[x,y]...[x,y]]} _points - Array of cartesian positions
      * @param {SVGSVGElement} _svg - SVG instance, used only to instantiate the new polygon, can be passed
      *                               when multiple calling is necessary, that way must reduce processing usage
      *                               by not creating new instances every call. **(default: *new SVG instance*)**
@@ -150,7 +150,8 @@ class HexTile {
      * @param {Number} _x - Horizontal position
      * @param {Number} _y - Vertical position
      * @param {Number} _z - Tile height
-     * @param {[String]} _aditional_classes - Array of Tile Element aditional classes
+     * @param {String[]} _aditional_classes - Array of Tile Element aditional classes
+     * @param {String[]} _textures - Array of Tile Element aditional classes
      */
     constructor(_x, _y, _z=1, _aditional_classes=[], _textures=["",""]) {
         this.id = HexTile._ID_INCREMENT++;
