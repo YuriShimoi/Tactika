@@ -86,6 +86,25 @@ class ChunkBlob {
     }
 }
 
+class ChunkPattern {
+    static settings = {
+        radius    : 15,
+        density   : 0.4,
+        spacing   : 2,
+        iterations: 8,
+        
+        max_height: 5,
+        min_height: 2,
+
+        fill : ChunkBlob.FILL_CHAR,
+        empty: ChunkBlob.EMPTY_CHAR,
+
+        do_strip       : true,
+        strip_size     : 3,
+        strip_jump_size: 1
+    };
+}
+
 
 
 //#region [Generation by shape, abandoned for now]

@@ -2,20 +2,23 @@ const ELEMENT = document.getElementById("main");
 const ANCHOR  = {'x': 0, 'y': 0, 'initial_x': null, 'initial_y': null};
 const MOUSE   = {'active': false, 'origin_x': 0, 'origin_y': 0};
 
-const DEFAULT_TEXTURE = ["img/floor.png", "img/lateral.png"];
+const TERRAIN_CLASSES = ["grass-tile"];
+const TERRAIN_TEXTURE = ["img/floor.png", "img/lateral.png"];
+const WATER_CLASSES = ["water-tile"];
+const WATER_TEXTURE = ["img/water.png","img/water.png"];
 
 //#region [Testing Mapping]
 /*
-let MAPPING = [new HexTile(1, 6, 13, ["grass-tile"], DEFAULT_TEXTURE), new HexTile(2, 6, 3, ["grass-tile"], DEFAULT_TEXTURE), new HexTile(3, 6, 3, ["grass-tile"], DEFAULT_TEXTURE)];
+let MAPPING = [new HexTile(1, 6, 13, TERRAIN_CLASSES, TERRAIN_TEXTURE), new HexTile(2, 6, 3, TERRAIN_CLASSES, TERRAIN_TEXTURE), new HexTile(3, 6, 3, TERRAIN_CLASSES, TERRAIN_TEXTURE)];
 
 for(let _y=0; _y<35; _y++) {
     for(let _x=0; _x<12; _x++) {
-        let _classes = ["grass-tile"];
-        let _texture = DEFAULT_TEXTURE;
+        let _classes = TERRAIN_CLASSES;
+        let _texture = TERRAIN_TEXTURE;
         let _z = 2;
         if(_y>20) {
-            _texture = ["img/water.png","img/water.png"];
-            _classes = ["water-tile"];
+            _texture = WATER_TEXTURE;
+            _classes = WATER_CLASSES;
             _z = 1;
         }
         if(!(_x == 1 && _y == 6) && !(_x == 2 && _y == 6) && !(_x == 3 && _y == 6)) MAPPING.push(new HexTile(_x, _y, _z, _classes, _texture));
@@ -25,19 +28,9 @@ for(let _y=0; _y<35; _y++) {
 //#endregion
 
 //#region [ChunkBlob Mapping]
-let CHUNKGEN = ChunkBlob.stripeHorizontal(ChunkBlob.generate(15, 0.35, 2, 8), 1, 3);
-let MAPPING  = [];
-for(let _y in CHUNKGEN) {
-    _y = Number(_y);
-    for(let _x in CHUNKGEN[_y]) {
-        _x = Number(_x);
-        let _z = CHUNKGEN[_y][_x]? Math.round(Math.random()+2): 1;
-        let _classes = CHUNKGEN[_y][_x]? ["grass-tile"]: ["water-tile"];
-        let _texture = CHUNKGEN[_y][_x]? DEFAULT_TEXTURE: ["img/water.png","img/water.png"];
-        MAPPING.push(new HexTile(_x, _y, _z, _classes, _texture));
-    }
-}
+let MAPPING = ChunkPattern.Island.generate(TERRAIN_CLASSES, TERRAIN_TEXTURE, WATER_CLASSES, WATER_TEXTURE);
 //#endregion
+
 
 
 function centerContainer() {
