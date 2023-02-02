@@ -35,12 +35,12 @@ class HexTiler {
         containerHTML.setAttribute('v2', _tile.v2);
 
         let tile_height = _tile.z * HexTiler.config.step_height;
-        containerHTML.setAttribute('height', (2 + tile_height) * HexTiler.config.scale);
+        containerHTML.setAttribute('height', (2 + tile_height) * HexTiler.config.scale * HexTiler.config.step_height);
         containerHTML.setAttribute('width' , 4 * HexTiler.config.scale);
 
         let even_adjust = _tile.y % 2? 3: 0; // when is an even line need an initial adjust
-        let _left = (_tile.x * 6 + even_adjust) * HexTiler.config.scale;// + (_tile.x * 1);
-        let _top  = (_tile.y - _tile.z) * HexTiler.config.scale;// + (_tile.y * 1);
+        let _left = (_tile.x * 6 + even_adjust) * HexTiler.config.scale;
+        let _top  = (_tile.y - (_tile.z * HexTiler.config.step_height)) * HexTiler.config.scale;
         containerHTML.style = `z-index: ${_tile.y};margin-left: ${_left}px; margin-top: ${_top}px`;
         //#endregion
 

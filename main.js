@@ -28,7 +28,8 @@ for(let _y=0; _y<35; _y++) {
 //#endregion
 
 //#region [ChunkBlob Mapping]
-let MAPPING = ChunkPattern.Island.generate(TERRAIN_CLASSES, TERRAIN_TEXTURE, WATER_CLASSES, WATER_TEXTURE);
+ChunkPattern.settings.radius = 19;
+let MAPPING = ChunkPattern.Island.generate(TERRAIN_CLASSES, TERRAIN_TEXTURE, WATER_CLASSES, WATER_TEXTURE, -1);
 //#endregion
 
 
